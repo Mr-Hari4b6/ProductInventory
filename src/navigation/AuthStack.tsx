@@ -4,6 +4,8 @@ import { ForgotPassword } from '../screens/authentication/ForgotPassword';
 import LoginScreen from '../screens/authentication/LoginScreen';
 import RegisterScreen from '../screens/authentication/RegisterScreen';
 import AppStack from './AppStack';
+import ProductCostCalculator from '../screens/product-cost-calculator/ProductCostCalculator';
+import InventoryDetails from '../screens/inventory-management/InventoryDetails';
 
 const Stack = createNativeStackNavigator();
 
@@ -14,6 +16,7 @@ const AuthStack = () => {
       <Stack.Screen name="Register" component={RegisterScreen} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="App" component={AppStack} />
+      <Stack.Screen name="InventoryDetails" options={{headerShown: true}} component={InventoryDetails} />
     </Stack.Navigator>
   );
 };

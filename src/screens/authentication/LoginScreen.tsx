@@ -7,25 +7,51 @@ import Checkbox from "expo-checkbox";
 import CustomButton from '../../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../context/AuthContext';
+import { SocialLogins } from '../../components/SocialLogin';
+import { assets } from '../../assets';
+import axios from 'axios';
+import* as  Rest from '../../../src/utils/restapi';
 
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}: any) => {
 
     const [isPasswordShown, setIsPasswordShown] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const navigation = useNavigation();
+    //const navigation = useNavigation();
 
-    const { setIsLoggedIn } = useAuth();
+    const { setIsLoggedIn } = useAuth();    
 
-    const doLogin = () => {
-        if (username && password) {
+    const doLogin = (navigation: any) => {
+        if(username && password) {
             navigation.navigate('App');
             setIsLoggedIn(true);
         } else {
-            Alert.alert('Please enter your credentials!')
+            Alert.alert('Please enter valid credentials');
         }
+    }
+    // const handleLogin = (navigation:any) => {
+    //     const user = {
+    //         username: username,
+    //         password: password
+    //     }
+    //     axios.post(Rest.userLogin, user).then((response) => {
+    //         console.log('response',response);
+    //         navigation.navigate('App');
+    //         setIsLoggedIn(true);
+    //         Alert.alert("Registration successfull", "You have been registered succesfully");
+    //         setUsername('');
+    //         setPassword('');
+
+    //     }).catch((error) => {
+    //         Alert.alert("Logiin failed", "an error ocurred during login");
+    //         console.log("error", error)
+    //     })
+    // }
+
+    const handleRegister = (navigation: any) => {
+        navigation.navigate('Register');
     }
 
     return (
@@ -36,9 +62,8 @@ const LoginScreen = () => {
                         alt="App Logo"
                         resizeMode="contain"
                         style={styles.headerImg}
-                        source={{
-                            uri: 'https://assets.withfra.me/SignIn.2.png',
-                        }} />
+                        source={assets.appicon}
+                     />
                     <Text style={styles.title}>
                         <Text style={{ color: '#075eec' }}>ProductInvot</Text>
                     </Text>
@@ -73,7 +98,7 @@ const LoginScreen = () => {
                         borderRadius: 8,
                         alignItems: "center",
                         justifyContent: "center",
-                        paddingLeft: 22
+                        paddingLeft: 10
                     }}>
                         <TextInput
                             placeholder='Enter your email address'
@@ -103,12 +128,13 @@ const LoginScreen = () => {
                         borderRadius: 8,
                         alignItems: "center",
                         justifyContent: "center",
-                        paddingLeft: 22
+                        paddingLeft: 10
                     }}>
                         <TextInput
                             placeholder='Enter your password'
                             placeholderTextColor={COLORS.black}
                             secureTextEntry={isPasswordShown}
+                            keyboardType='default'
                             onChangeText={(text) => setPassword(text)}
                             style={{
                                 width: "100%"
@@ -125,7 +151,7 @@ const LoginScreen = () => {
                         >
                             {
                                 isPasswordShown == true ? (
-                                    <Icon name="eye-off" size={24} color={COLORS.black} />
+                                    <Icon name="eye-slash" size={24} color={COLORS.black} />
                                 ) : (
                                     <Icon name="eye" size={24} color={COLORS.black} />
                                 )
@@ -156,7 +182,7 @@ const LoginScreen = () => {
                         marginTop: 18,
                         marginBottom: 4,
                     }}
-                    onPress={() => doLogin()}
+                    onPress={() => doLogin(navigation)}
                 />
 
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
@@ -178,95 +204,7 @@ const LoginScreen = () => {
                         }}
                     />
                 </View>
-
-                <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                }}>
-                    <TouchableOpacity
-                        onPress={() => console.log("Pressed")}
-                        style={{
-                            flex: 1,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexDirection: 'row',
-                            height: 52,
-                            borderWidth: 1,
-                            borderColor: COLORS.grey,
-                            marginRight: 4,
-                            borderRadius: 10
-                        }}
-                    >
-                        <Icon
-                            name='facebook'
-                            size={30}
-                            style={{
-                                height: 30,
-                                width: 30,
-                                marginRight: 8
-                            }}
-                            color='blue'
-                        />
-
-                        <Text style={{ fontWeight: '500', color: 'black' }}>Facebook</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        onPress={() => console.log("Pressed")}
-                        style={{
-                            flex: 1,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexDirection: 'row',
-                            height: 52,
-                            borderWidth: 1,
-                            borderColor: COLORS.grey,
-                            marginRight: 4,
-                            borderRadius: 10
-                        }}
-                    >
-                        <Icon
-                            name='google'
-                            size={30}
-                            style={{
-                                height: 30,
-                                width: 30,
-                                marginRight: 8
-                            }}
-                            color='red'
-                        />
-
-                        <Text style={{ fontWeight: '500', color: 'black' }}>Google</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => console.log("Pressed")}
-                        style={{
-                            flex: 1,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexDirection: 'row',
-                            height: 52,
-                            borderWidth: 1,
-                            borderColor: COLORS.grey,
-                            marginRight: 4,
-                            borderRadius: 10
-                        }}
-                    >
-                        <Icon
-                            name='twitter'
-                            size={30}
-                            style={{
-                                height: 30,
-                                width: 30,
-                                marginRight: 8
-                            }}
-                            color='blue'
-                        />
-
-                        <Text style={{ fontWeight: '500', color: 'black' }}>Titter</Text>
-                    </TouchableOpacity>
-                </View>
-
+                <SocialLogins />
                 <View style={{
                     flexDirection: "row",
                     justifyContent: "center",
@@ -274,7 +212,7 @@ const LoginScreen = () => {
                 }}>
                     <Text style={{ fontSize: 16, color: COLORS.black }}>Don't have an account ? </Text>
                     <Pressable
-                        onPress={() => navigation.navigate("Register")}
+                        onPress={() => handleRegister(navigation)}
                     >
                         <Text style={{
                             fontSize: 16,

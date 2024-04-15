@@ -11,7 +11,7 @@ interface AuthProviderProps {
 }
 // Create the initial context with default values
 const AuthContext = createContext<AuthContextType>({
-    isLoggedIn: true,
+    isLoggedIn: false,
     setIsLoggedIn: () => { },
 });
 

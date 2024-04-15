@@ -7,7 +7,7 @@ import { AuthProvider, useAuth } from './src/context/AuthContext';
 
 function App(): React.JSX.Element {
   const { isLoggedIn } = useAuth();
-  console.log('isloggedin',isLoggedIn)
+
   return (
     <AuthProvider>
       <NavigationContainer>

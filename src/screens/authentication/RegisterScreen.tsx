@@ -1,25 +1,73 @@
-import { View, Text, Image, Pressable, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
 import React, { useState } from 'react'
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+    View,
+    Text,
+    Alert,
+    Image,
+    Pressable,
+    TextInput,
+    TouchableOpacity,
+    StyleSheet,
+    SafeAreaView,
+    ScrollView
+} from 'react-native'
+import axios from 'axios';
 import COLORS from '../../constants/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Checkbox from "expo-checkbox"
 import Button from '../../components/CustomButton';
+import { SocialLogins } from '../../components/SocialLogin';
+import { assets } from '../../assets';
+import* as  Rest from '../../../src/utils/restapi';
 
+type User = {
+    name: string;
+    email: string;
+    mobileNumber: string;
+    password: string
+}
 const RegisterScreen = ({ navigation }: any) => {
     const [isPasswordShown, setIsPasswordShown] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
+
+    const [user, setUser] = useState<User>({
+        name: '',
+        email: '',
+        mobileNumber:'',
+        password: ''
+    })
+ 
+    const handleChange = (fieldName: string,value: string) => {
+        setUser({...user,[fieldName]: value});
+    }
+
+    const handleRegister = () => {
+        axios.post(Rest.userRegister, user).then((response) => {
+            console.log('response',response);
+            Alert.alert("Registration successfull", "You have been registered succesfully");
+            setUser({
+                name: '',
+                email: '',
+                mobileNumber:'',
+                password: ''
+            });
+
+        }).catch((error) => {
+            Alert.alert("Registration failed", "an error ocurred during registration");
+            console.log("error", error)
+        })
+    }
+
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
-            <View style={{ flex: 1, marginHorizontal: 22 }}>
+        <ScrollView style={{ flex: 1, backgroundColor: COLORS.white }}>
+            <View style={{ flex: 1, marginHorizontal: 22, marginVertical: 0 }}>
                 <View style={styles.header}>
                     <Image
                         alt="App Logo"
                         resizeMode="contain"
                         style={styles.headerImg}
-                        source={{
-                            uri: 'https://assets.withfra.me/SignIn.2.png',
-                        }} />
+                        source={assets.appicon}
+                    />
                     <Text style={styles.title}>
                         <Text style={{ color: '#075eec' }}>ProductInvot</Text>
                     </Text>
@@ -41,7 +89,36 @@ const RegisterScreen = ({ navigation }: any) => {
                         fontSize: 16,
                         fontWeight: '600',
                         marginVertical: 8,
-                        color:'black'
+                        color: 'black'
+                    }}>Name</Text>
+
+                    <View style={{
+                        width: "100%",
+                        height: 48,
+                        borderColor: COLORS.black,
+                        borderWidth: 1,
+                        borderRadius: 8,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        paddingLeft: 10
+                    }}>
+                        <TextInput
+                            placeholder='Enter your fullname'
+                            placeholderTextColor={COLORS.black}
+                            keyboardType='default'
+                            style={{
+                                width: "100%"
+                            }}
+                            onChangeText={(text)=>handleChange('name',text)}
+                        />
+                    </View>
+                </View>
+                <View style={{ marginBottom: 12 }}>
+                    <Text style={{
+                        fontSize: 16,
+                        fontWeight: '600',
+                        marginVertical: 8,
+                        color: 'black'
                     }}>Email address</Text>
 
                     <View style={{
@@ -52,7 +129,7 @@ const RegisterScreen = ({ navigation }: any) => {
                         borderRadius: 8,
                         alignItems: "center",
                         justifyContent: "center",
-                        paddingLeft: 22
+                        paddingLeft: 10
                     }}>
                         <TextInput
                             placeholder='Enter your email address'
@@ -61,6 +138,7 @@ const RegisterScreen = ({ navigation }: any) => {
                             style={{
                                 width: "100%"
                             }}
+                            onChangeText={(text)=>handleChange('email',text)}
                         />
                     </View>
                 </View>
@@ -70,7 +148,7 @@ const RegisterScreen = ({ navigation }: any) => {
                         fontSize: 16,
                         fontWeight: '600',
                         marginVertical: 8,
-                        color:'black'
+                        color: 'black'
                     }}>Mobile Number</Text>
 
                     <View style={{
@@ -82,7 +160,7 @@ const RegisterScreen = ({ navigation }: any) => {
                         alignItems: "center",
                         flexDirection: "row",
                         justifyContent: "space-between",
-                        paddingLeft: 22
+                        paddingLeft: 10
                     }}>
                         <TextInput
                             placeholder='+91'
@@ -92,7 +170,7 @@ const RegisterScreen = ({ navigation }: any) => {
                                 width: "12%",
                                 borderRightWidth: 1,
                                 borderLeftColor: COLORS.grey,
-                                height: "100%"
+                                height: "100%",
                             }}
                         />
 
@@ -103,6 +181,7 @@ const RegisterScreen = ({ navigation }: any) => {
                             style={{
                                 width: "80%"
                             }}
+                            onChangeText={(text)=>handleChange('mobileNumber',text)}
                         />
                     </View>
                 </View>
@@ -112,7 +191,7 @@ const RegisterScreen = ({ navigation }: any) => {
                         fontSize: 16,
                         fontWeight: '600',
                         marginVertical: 8,
-                        color:'black'
+                        color: 'black'
                     }}>Password</Text>
 
                     <View style={{
@@ -123,7 +202,7 @@ const RegisterScreen = ({ navigation }: any) => {
                         borderRadius: 8,
                         alignItems: "center",
                         justifyContent: "center",
-                        paddingLeft: 22
+                        paddingLeft: 10
                     }}>
                         <TextInput
                             placeholder='Enter your password'
@@ -132,6 +211,7 @@ const RegisterScreen = ({ navigation }: any) => {
                             style={{
                                 width: "100%"
                             }}
+                            onChangeText={(text)=>handleChange('password',text)}
                         />
 
                         <TouchableOpacity
@@ -143,7 +223,7 @@ const RegisterScreen = ({ navigation }: any) => {
                         >
                             {
                                 isPasswordShown == true ? (
-                                    <Icon name="eye-off" size={24} color={COLORS.black} />
+                                    <Icon name="eye-slash" size={24} color={COLORS.black} />
                                 ) : (
                                     <Icon name="eye" size={24} color={COLORS.black} />
                                 )
@@ -153,7 +233,7 @@ const RegisterScreen = ({ navigation }: any) => {
                     </View>
                 </View>
 
-                <View style={{
+                {/* <View style={{
                     flexDirection: 'row',
                     marginVertical: 6
                 }}>
@@ -165,7 +245,7 @@ const RegisterScreen = ({ navigation }: any) => {
                     />
 
                     <Text>I aggree to the terms and conditions</Text>
-                </View>
+                </View> */}
 
                 <Button
                     title="Sign Up"
@@ -174,6 +254,7 @@ const RegisterScreen = ({ navigation }: any) => {
                         marginTop: 18,
                         marginBottom: 4,
                     }}
+                    onPress={handleRegister}
                 />
 
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
@@ -196,98 +277,11 @@ const RegisterScreen = ({ navigation }: any) => {
                     />
                 </View>
 
-                <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                }}>
-                    <TouchableOpacity
-                        onPress={() => console.log("Pressed")}
-                        style={{
-                            flex: 1,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexDirection: 'row',
-                            height: 52,
-                            borderWidth: 1,
-                            borderColor: COLORS.grey,
-                            marginRight: 4,
-                            borderRadius: 10
-                        }}
-                    >
-                        <Icon
-                            name='facebook'
-                            size={30}
-                            style={{
-                                height: 30,
-                                width: 30,
-                                marginRight: 8
-                            }}
-                            color='blue'
-                        />
-
-                        <Text style={{ fontWeight: '500', color: 'black' }}>Facebook</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        onPress={() => console.log("Pressed")}
-                        style={{
-                            flex: 1,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexDirection: 'row',
-                            height: 52,
-                            borderWidth: 1,
-                            borderColor: COLORS.grey,
-                            marginRight: 4,
-                            borderRadius: 10
-                        }}
-                    >
-                        <Icon
-                            name='google'
-                            size={30}
-                            style={{
-                                height: 30,
-                                width: 30,
-                                marginRight: 8
-                            }}
-                            color='red'
-                        />
-
-                        <Text style={{ fontWeight: '500', color: 'black' }}>Google</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => console.log("Pressed")}
-                        style={{
-                            flex: 1,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexDirection: 'row',
-                            height: 52,
-                            borderWidth: 1,
-                            borderColor: COLORS.grey,
-                            marginRight: 4,
-                            borderRadius: 10
-                        }}
-                    >
-                        <Icon
-                            name='twitter'
-                            size={30}
-                            style={{
-                                height: 30,
-                                width: 30,
-                                marginRight: 8
-                            }}
-                            color='blue'
-                        />
-
-                        <Text style={{ fontWeight: '500', color: 'black' }}>Titter</Text>
-                    </TouchableOpacity>
-                </View>
-
+                <SocialLogins />
                 <View style={{
                     flexDirection: "row",
                     justifyContent: "center",
-                    marginVertical: 22
+                    marginVertical: 10
                 }}>
                     <Text style={{ fontSize: 16, color: COLORS.black }}>Already have an account</Text>
                     <Pressable
@@ -302,9 +296,9 @@ const RegisterScreen = ({ navigation }: any) => {
                     </Pressable>
                 </View>
             </View>
-        </SafeAreaView>
-    )
-}
+        </ScrollView>
+    );
+};
 
 const styles = StyleSheet.create({
     title: {
@@ -322,7 +316,7 @@ const styles = StyleSheet.create({
     header: {
         alignItems: 'center',
         justifyContent: 'center',
-        marginVertical: 20,
+        marginVertical: 10,
     },
     headerImg: {
         width: 80,

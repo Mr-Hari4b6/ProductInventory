@@ -2,25 +2,10 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import InventoryForm from '../screens/inventory/InventoryScreen';
-
-const MyHomeScreen = ({ navigation }: any) => (
-  <View style={styles.viewStyle}>
-    <Text style={styles.headingStyle}>MyHomeScreen</Text>
-    <TouchableOpacity onPress={() => navigation.navigate('Inventory')}>
-      <Text style={styles.textStyle}>Go to Inventory</Text>
-    </TouchableOpacity>
-  </View>
-);
-
-const OrdersScreen = ({ navigation }: any) => (
-  <View style={styles.viewStyle}>
-    <Text style={styles.headingStyle}>OrdersScreen</Text>
-    <TouchableOpacity onPress={() => navigation.navigate('Transfer')}>
-      <Text style={styles.textStyle}>Go to Transfer</Text>
-    </TouchableOpacity>
-  </View>
-);
+import InventoryItems from '../screens/inventory-management/InventoryItems';
+import SalesTabs from './SalesStack';
+import SettingsScreen from '../screens/settings/SettingsScreen';
+import HomeScreen from '../screens/home/HomeScreen';
 
 const TransferScreen = ({ navigation }: any) => (
   <View style={styles.viewStyle}>
@@ -31,18 +16,10 @@ const TransferScreen = ({ navigation }: any) => (
   </View>
 );
 
-const SettingsScreen = ({ navigation }: any) => (
-  <View style={styles.viewStyle}>
-    <Text style={styles.headingStyle}>SettingsScreen</Text>
-    <TouchableOpacity onPress={() => navigation.navigate('MyHome')}>
-      <Text style={styles.textStyle}>Go to MyHome</Text>
-    </TouchableOpacity>
-  </View>
-);
-
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -51,9 +28,9 @@ const TabNavigator = () => {
 
           if (route.name === 'MyHome') {
             iconName = focused ? 'home' : 'home';
-          } else if (route.name === 'Inventory') {
+          } else if (route.name === 'InventoryItems') {
             iconName = focused ? 'codepen' : 'codepen';
-          } else if (route.name === 'Orders') {
+          } else if (route.name === 'Sales') {
             iconName = focused ? 'shopping-cart' : 'shopping-cart';
           } else if (route.name === 'Transfer') {
             iconName = focused ? 'exchange' : 'exchange';
@@ -66,12 +43,12 @@ const TabNavigator = () => {
         tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: 'black',
         headerShown: false,
+        
       })}
-      
     >
-      <Tab.Screen name="MyHome" component={MyHomeScreen} />
-      <Tab.Screen name="Inventory" component={InventoryForm} />
-      <Tab.Screen name="Orders" component={OrdersScreen} />
+      <Tab.Screen name="MyHome" component={HomeScreen} />
+      <Tab.Screen name="InventoryItems" component={InventoryItems} />
+      <Tab.Screen name="Sales" component={SalesTabs} />
       <Tab.Screen name="Transfer" component={TransferScreen} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>
