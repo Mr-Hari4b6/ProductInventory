@@ -1,8 +1,9 @@
-const URL = 'http://localhost:3300'
+const URL = 'http://172.16.0.120:3300'
 
 export { URL }
-//Authentication
-//register api
-export const userRegister = URL + '/register';
-//login api
-export const userLogin = URL + '/login';
+
+export const userRegister = URL + '/api/user/registerUser';
+
+export const userLogin = URL + '/api/loginUser/loginUser';
+
+// email - srikrishna.d@gmail.com  sri123456

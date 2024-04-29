@@ -9,6 +9,7 @@ import FinanceScreen from '../screens/profile-management/FinanceScreen';
 const Tab = createBottomTabNavigator();
 
 const ProfileTabs = () => {
+    
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({

@@ -1,32 +1,14 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
-import { assets } from '../../assets';
 import { useNavigation } from '@react-navigation/native';
 
-interface UserDetails {
-    name: string;
-    phoneNumber: string;
-    email: string;
-    userId: string;
-    profilePicture?: string;
-    address?: string;
-    specialization?: string; // New field for user specialization
-}
-
-// Static user details data
-const staticUserDetails: UserDetails = {
-    name: 'John Doe',
-    phoneNumber: '+91 8239489243',
-    email: 'john.doe@example.com',
-    userId: 'JD123',
-    profilePicture: 'https://example.com/profile.jpg',
-    address: '123 Main St, Hyderabad, TN',
-    specialization: 'Goldsmith', // Example specialization
-};
+import { assets } from '../../assets';
+import { useAuth } from '../../context/AuthContext';
 
 const ProfileScreen: React.FC = () => {
-    const userDetails = staticUserDetails;
+    
     const navigation = useNavigation();
+    const { logoutUser, userInfo } = useAuth();
 
     // Handler for editing profile
     const handleEditProfile = () => {
@@ -35,53 +17,51 @@ const ProfileScreen: React.FC = () => {
     };
 
     // Handler for logging out
-    const doLogout = (navigation:any)=> navigation.navigate('Login');
+    const doLogout = (navigation: any) => {
+        logoutUser();
+        navigation.navigate('Login');
+    };
 
     return (
         <View style={styles.container}>
             <View style={styles.profileContainer}>
-                {userDetails.profilePicture && (
-                    <View style={styles.profilePictureContainer}>
-                        <Image source={assets.profile} style={styles.profilePicture} />
-                    </View>
-                )}
+                <View style={styles.profilePictureContainer}>
+                    <Image source={assets.profile} style={styles.profilePicture} />
+                </View>
                 <Text style={styles.title}>User Details</Text>
                 <View style={styles.detailsContainer}>
                     <Text style={styles.label}>User ID:</Text>
-                    <Text style={styles.value}>{userDetails.userId}</Text>
+                    <Text style={styles.value}>{userInfo?.userID}</Text>
                 </View>
                 <View style={styles.detailsContainer}>
                     <Text style={styles.label}>Name:</Text>
-                    <Text style={styles.value}>{userDetails.name}</Text>
+                    <Text style={styles.value}>{userInfo?.firstName}{' '}{userInfo?.lastName}</Text>
                 </View>
                 <View style={styles.detailsContainer}>
                     <Text style={styles.label}>Phone Number:</Text>
-                    <Text style={styles.value}>{userDetails.phoneNumber}</Text>
+                    <Text style={styles.value}>{userInfo?.mobileNumber}</Text>
                 </View>
                 <View style={styles.detailsContainer}>
                     <Text style={styles.label}>Email:</Text>
-                    <Text style={styles.value}>{userDetails.email}</Text>
+                    <Text style={styles.value}>{userInfo?.email}</Text>
                 </View>
-                {/* Display specialization if available */}
-                {userDetails.specialization && (
-                    <View style={styles.detailsContainer}>
-                        <Text style={styles.label}>Specialization:</Text>
-                        <Text style={styles.value}>{userDetails.specialization}</Text>
-                    </View>
-                )}
-                {/* Additional details */}
-                {userDetails.address && (
-                    <View style={styles.detailsContainer}>
-                        <Text style={styles.label}>Address:</Text>
-                        <Text style={styles.value}>{userDetails.address}</Text>
-                    </View>
-                )}
+
+                <View style={styles.detailsContainer}>
+                    <Text style={styles.label}>Specialization:</Text>
+                    <Text style={styles.value}>{userInfo?.businessType}</Text>
+                </View>
+
+                <View style={styles.detailsContainer}>
+                    <Text style={styles.label}>Address:</Text>
+                    <Text style={styles.value}>{userInfo?.address}</Text>
+                </View>
+
                 {/* Edit Profile Button */}
                 <TouchableOpacity style={styles.button} onPress={handleEditProfile}>
                     <Text style={styles.buttonText}>Edit Profile</Text>
                 </TouchableOpacity>
                 {/* Logout Button */}
-                <TouchableOpacity style={[styles.button, styles.logoutButton]} onPress={()=>doLogout(navigation)}>
+                <TouchableOpacity style={[styles.button, styles.logoutButton]} onPress={() => doLogout(navigation)}>
                     <Text style={styles.buttonText}>Logout</Text>
                 </TouchableOpacity>
             </View>

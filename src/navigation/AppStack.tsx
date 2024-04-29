@@ -10,6 +10,8 @@ import { FloatingButton } from '../components/FloatingButton';
 import ProductCostCalculator from '../screens/product-cost-calculator/ProductCostCalculator';
 import HeaderComponent from '../components/CustomHeader';
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../context/AuthContext';
+import AuthStack from './AuthStack';
 
 
 const MessagesScreen = () => <View style={styles.viewStyle}><Text style={styles.textStyle}>Messages Screen</Text></View>
@@ -19,7 +21,7 @@ const Drawer = createDrawerNavigator();
 
 const AppStack = () => {
 
-    const navigation = useNavigation();
+    const { userInfo, logoutUser } = useAuth();
 
     return (
         <>
@@ -48,18 +50,18 @@ const AppStack = () => {
                                     />
                                     <Text
                                         style={{
-                                            fontSize: 22,
+                                            fontSize: 20,
                                             marginVertical: 6,
                                             fontWeight: "bold",
                                             color: "#111"
                                         }}
-                                    >John Doe</Text>
+                                    >{userInfo?.firstName}{' '}{userInfo?.lastName}</Text>
                                     <Text
                                         style={{
                                             fontSize: 16,
                                             color: "#111"
                                         }}
-                                    >Goldsmith</Text>
+                                    >{userInfo?.businessType}</Text>
                                 </View>
                                 <DrawerItemList {...props} />
                             </SafeAreaView>
@@ -82,7 +84,7 @@ const AppStack = () => {
                     drawerInactiveTintColor: 'black',
                     drawerActiveBackgroundColor: 'purple',
                     drawerActiveTintColor: 'white'
-                    
+
                 }}
             >
                 <Drawer.Screen
@@ -153,8 +155,11 @@ const AppStack = () => {
                     // Instead of rendering AuthStack component, navigate to it
                     // Adjust the listeners prop to return an object with expected properties
                     listeners={({ navigation }) => ({
-                        drawerItemPress: () =>
-                            navigation.navigate('Login'),
+                        drawerItemPress: () => {
+                            // Navigate to "Onboarding" screen in the AuthStack
+                            logoutUser();
+                            navigation.navigate('Login');
+                        }
                     })}
                     children={({ route, navigation }) => {
                         // You can return the content you want to render for the "SignOut" screen here

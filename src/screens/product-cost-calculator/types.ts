@@ -24,7 +24,7 @@ interface Specifications {
    height: string,
    width: string,
    quantity: string,
-   price?: string
+   price: string
 }
 
 export type { MachineData, ManPowerData, MaterialData, Specifications };

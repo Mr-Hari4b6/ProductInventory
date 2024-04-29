@@ -6,6 +6,7 @@ import InventoryItems from '../screens/inventory-management/InventoryItems';
 import SalesTabs from './SalesStack';
 import SettingsScreen from '../screens/settings/SettingsScreen';
 import HomeScreen from '../screens/home/HomeScreen';
+import InventoryStack from './InventoryStack';
 
 const TransferScreen = ({ navigation }: any) => (
   <View style={styles.viewStyle}>
@@ -28,7 +29,7 @@ const TabNavigator = () => {
 
           if (route.name === 'MyHome') {
             iconName = focused ? 'home' : 'home';
-          } else if (route.name === 'InventoryItems') {
+          } else if (route.name === 'Inventory') {
             iconName = focused ? 'codepen' : 'codepen';
           } else if (route.name === 'Sales') {
             iconName = focused ? 'shopping-cart' : 'shopping-cart';
@@ -47,7 +48,7 @@ const TabNavigator = () => {
       })}
     >
       <Tab.Screen name="MyHome" component={HomeScreen} />
-      <Tab.Screen name="InventoryItems" component={InventoryItems} />
+      <Tab.Screen name="Inventory" component={InventoryStack} />
       <Tab.Screen name="Sales" component={SalesTabs} />
       <Tab.Screen name="Transfer" component={TransferScreen} />
       <Tab.Screen name="Settings" component={SettingsScreen} />

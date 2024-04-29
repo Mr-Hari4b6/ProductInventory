@@ -2,10 +2,12 @@ import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { Card } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../../context/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeScreen: React.FC = () => {
+    
     const navigation = useNavigation();
-
     const handleAddProduct = (navigation: any) => {
         navigation.navigate('ProductCost');
     };
@@ -14,6 +16,30 @@ const HomeScreen: React.FC = () => {
         navigation.navigate('Sales');
     };
 
+    // Function to retrieve products from AsyncStorage
+const getProductsFromStorage = async () => {
+    try {
+      const productsJSON = await AsyncStorage.getItem('products');
+      if (productsJSON !== null) {
+        return JSON.parse(productsJSON);
+      } else {
+        return []; // Return an empty array if no products are found
+      }
+    } catch (error) {
+      console.error('Error retrieving products:', error);
+      return []; // Return an empty array in case of an error
+    }
+  };
+  
+  // Usage example
+  const retrieveProducts = async () => {
+    const products = await getProductsFromStorage();
+    console.log('Retrieved products:',JSON.stringify(products));
+  };
+  
+  // Call the function to retrieve products
+  retrieveProducts();
+  
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Welcome <Text style={{ color: 'purple' }}>John Doe</Text>!</Text>

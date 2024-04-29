@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import CustomModal from '../../components/CustomModal';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { DataTable, Button } from 'react-native-paper';
+
+import CustomModal from '../../components/CustomModal';
 import DeleteModal from '../../components/DeleteModal';
 
 interface FormData {
@@ -24,8 +25,6 @@ export const ProductInventoryForm = ({ title, buttonTitle, details, setDetails, 
     const [showDeleteModel, setShowDeleteModel] = useState(false);
     const [selectedRow, setSelectedRow] = useState<any>(null);
     const [rowToDelete, setRowToDelete] = useState<any>(null);
-
-    console.log('details',details);
 
     // Function to handle saving the form data
     const handleSave = (data: any) => {
@@ -60,7 +59,7 @@ export const ProductInventoryForm = ({ title, buttonTitle, details, setDetails, 
     return (
         <View style={styles.section}>
             <Text style={{ fontWeight: 'bold', color: 'black' }}>{title}</Text>
-            <DataTable style={{display:'flex',justifyContent:'space-between'}}>
+            <DataTable style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <DataTable.Header>
                     {columns.map((key, i) => (
                         <DataTable.Title key={i}>{key}</DataTable.Title>
@@ -102,21 +101,20 @@ export const ProductInventoryForm = ({ title, buttonTitle, details, setDetails, 
                         </DataTable.Cell>
                     </DataTable.Row>
                 ))}
-                {details.length > 0 && <DataTable.Row>
-                    <DataTable.Cell numeric>TotalCost:</DataTable.Cell>
-                    <DataTable.Cell numeric>{calculateTotalCost()}</DataTable.Cell>
-                </DataTable.Row>}
-                <Button 
-                   buttonColor='blue' 
-                   style={{ borderRadius: 0 }} 
-                   textColor='white' 
-                  
-                   onPress={() => setModalVisible(!modalVisible)}
-                   >
-                    {buttonTitle}
-                </Button>
+                {details.length > 0 &&
+                    <DataTable.Row>
+                        <DataTable.Cell numeric>TotalCost:</DataTable.Cell>
+                        <DataTable.Cell numeric>{calculateTotalCost()}</DataTable.Cell>
+                    </DataTable.Row>
+                }
+                <TouchableOpacity
+                    onPress={() => setModalVisible(!modalVisible)}
+                    style={styles.addButton}
+                >
+                    <Text style={styles.addButtonText}>{buttonTitle}</Text>
+                </TouchableOpacity>
             </DataTable>
-           
+
             {/* Modal for confirmation */}
             <CustomModal
                 fields={formFields}
@@ -144,6 +142,18 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         gap: 5
+    },
+    addButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'blue',
+        padding: 10,
+        borderRadius: 5,
+        justifyContent: 'center',
+    },
+    addButtonText: {
+        color: '#fff',
+        marginRight: 10,
     },
 });
 

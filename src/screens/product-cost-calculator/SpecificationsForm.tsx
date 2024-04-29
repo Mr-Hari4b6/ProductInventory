@@ -19,7 +19,6 @@ export const SpecificationsForm = ({ details, setDetails }: SpecificationsDetail
 
     // Function to handle saving the form data
     const handleSave = (data: any) => {
-        console.log('Data:', data);
         //setDetails(data);
         setSelectedRow(null);
         setModalVisible(false);
@@ -39,17 +38,21 @@ export const SpecificationsForm = ({ details, setDetails }: SpecificationsDetail
             setRowToDelete(null);
         }
     };
-
+    // Function to calculate total cost
+    const calculateTotalCost = (): number => {
+        return details.reduce((total, item) => total + (parseFloat(item.price) * parseInt(item.quantity)), 0);
+    };
     return (
         <View style={styles.section}>
             {details.length > 0 &&
                 <DataTable>
-                    <DataTable.Header>
+                    <DataTable.Header style={{ gap: 10, overflow: 'scroll' }}>
                         <DataTable.Title>Color</DataTable.Title>
                         <DataTable.Title>Weight</DataTable.Title>
                         <DataTable.Title>Height</DataTable.Title>
                         <DataTable.Title>Width</DataTable.Title>
                         <DataTable.Title>Units</DataTable.Title>
+                        <DataTable.Title>Price/unit</DataTable.Title>
                         <DataTable.Title>Edit</DataTable.Title>
                         <DataTable.Title>Delete</DataTable.Title>
                     </DataTable.Header>
@@ -61,6 +64,7 @@ export const SpecificationsForm = ({ details, setDetails }: SpecificationsDetail
                             <DataTable.Cell>{spec.height}</DataTable.Cell>
                             <DataTable.Cell>{spec.width}</DataTable.Cell>
                             <DataTable.Cell>{spec.quantity}</DataTable.Cell>
+                            <DataTable.Cell>{spec.price}</DataTable.Cell>
                             <DataTable.Cell>
                                 <Button
                                     onPress={() => {
@@ -91,7 +95,14 @@ export const SpecificationsForm = ({ details, setDetails }: SpecificationsDetail
 
                         </DataTable.Row>
                     ))}
-                </DataTable>}
+                    {details.length > 0 &&
+                        <DataTable.Row>
+                            <DataTable.Cell numeric>TotalCost:</DataTable.Cell>
+                            <DataTable.Cell numeric>{calculateTotalCost()}</DataTable.Cell>
+                        </DataTable.Row>
+                    }
+                </DataTable>
+            }
 
             <TouchableOpacity onPress={() => setModalVisible(!modalVisible)} style={styles.addButton}>
                 <Text style={styles.addButtonText}>Add Specifications Details</Text>
